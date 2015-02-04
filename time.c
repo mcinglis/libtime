@@ -11,6 +11,8 @@
 #include <libmacro/minmax.h>    // MIN
 #include <libmacro/require.h>
 
+#include "tm.h"
+
 
 bool
 time__is_valid( Time const t )
@@ -26,6 +28,21 @@ time__from_tm( struct tm const tm )
                      .minutes = tm.tm_min,
                      .seconds = tm.tm_sec };
 }
+
+
+Time
+time__local_from_time_t( time_t const t )
+{
+    return time__from_tm( tm__local_from_time_t( t ) );
+}
+
+
+Time
+time__local_from_timespec( struct timespec const ts )
+{
+    return time__from_tm( tm__local_from_timespec( ts ) );
+}
+
 
 
 Time

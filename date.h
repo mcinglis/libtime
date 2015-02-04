@@ -44,6 +44,8 @@ bool date__is_valid( Date );
 
 Date date__from_tm( struct tm );
 
+Date date__local_from_time_t( time_t );
+Date date__local_from_timespec( struct timespec );
 
 ord date__compare( Date, Date );
 

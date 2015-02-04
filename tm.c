@@ -8,11 +8,11 @@
 
 
 struct tm
-tm__local_from_seconds( time_t const seconds )
+tm__local_from_time_t( time_t const t )
 {
     errno = 0;
     struct tm tm = { 0 };
-    localtime_r( &seconds, &tm );
+    localtime_r( &t, &tm );
     return tm;
 }
 
@@ -20,7 +20,7 @@ tm__local_from_seconds( time_t const seconds )
 struct tm
 tm__local_from_timespec( struct timespec const ts )
 {
-    return tm__local_from_seconds( ts.tv_sec );
+    return tm__local_from_time_t( ts.tv_sec );
 }
 
 

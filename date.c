@@ -6,6 +6,8 @@
 #include <libmacro/logic.h>     // ALL
 #include <libmacro/require.h>
 
+#include "tm.h"
+
 
 bool
 date__is_valid( Date const d )
@@ -22,6 +24,20 @@ date__from_tm( struct tm const tm )
                      .day   = tm.tm_mday };
     REQUIRE( date__is_valid( d ) );
     return d;
+}
+
+
+Date
+date__local_from_time_t( time_t const t )
+{
+    return date__from_tm( tm__local_from_time_t( t ) );
+}
+
+
+Date
+date__local_from_timespec( struct timespec const ts )
+{
+    return date__from_tm( tm__local_from_timespec( ts ) );
 }
 
 

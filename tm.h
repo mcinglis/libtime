@@ -25,7 +25,7 @@
 
 
 struct tm
-tm__local_from_seconds( time_t );
+tm__local_from_time_t( time_t );
 
 
 struct tm

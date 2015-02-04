@@ -53,6 +53,8 @@ bool datetime__is_valid( DateTime );
 
 DateTime datetime__from_tm( struct tm );
 
+DateTime datetime__local_from_time_t( time_t );
+DateTime datetime__local_from_timespec( struct timespec );
 
 Date datetime__date( DateTime );
 Time datetime__time( DateTime );

@@ -42,8 +42,10 @@ bool time__is_valid( Time );
 
 
 Time time__from_tm( struct tm );
+Time time__from_seconds( time_t );
 
-Time time__from_seconds( time_t seconds );
+Time time__local_from_time_t( time_t );
+Time time__local_from_timespec( struct timespec );
 
 time_t time__to_seconds( Time );
 
