@@ -68,8 +68,8 @@ date__less_than( Date const l,
 
 
 bool
-date__less_than_or_equal( Date const l,
-                          Date const r )
+date__less_than_or_eq( Date const l,
+                       Date const r )
 {
     return date__compare( l, r ) <= EQ;
 }
@@ -92,8 +92,8 @@ date__not_equal( Date const l,
 
 
 bool
-date__greater_than_or_equal( Date const l,
-                             Date const r )
+date__greater_than_or_eq( Date const l,
+                          Date const r )
 {
     return date__compare( l, r ) >= EQ;
 }

@@ -96,8 +96,8 @@ time__less_than( Time const l,
 
 
 bool
-time__less_than_or_equal( Time const l,
-                          Time const r )
+time__less_than_or_eq( Time const l,
+                       Time const r )
 {
     return time__compare( l, r ) <= EQ;
 }
@@ -120,8 +120,8 @@ time__not_equal( Time const l,
 
 
 bool
-time__greater_than_or_equal( Time const l,
-                             Time const r )
+time__greater_than_or_eq( Time const l,
+                          Time const r )
 {
     return time__compare( l, r ) >= EQ;
 }
