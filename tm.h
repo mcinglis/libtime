@@ -32,6 +32,10 @@ struct tm
 tm__local_from_timespec( struct timespec );
 
 
+struct tm
+tm__get_local( void );
+
+
 #endif
 
 
