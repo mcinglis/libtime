@@ -48,7 +48,9 @@ time__local_from_timespec( struct timespec const ts )
 Time
 time__from_seconds( time_t s )
 {
-    // TODO: fix this for negative values
+    if ( s <= 0 ) {
+        return ( Time ){ 0, 0, 0 };
+    }
     // TODO: check that arithmetic will have well-defined behavior
     uchar const seconds = s % 60;
     s -= seconds;
@@ -135,11 +137,23 @@ time__greater_than( Time const l,
 }
 
 
-Time time__add( Time const l,
-                Time const r )
+Time
+time__add( Time const l,
+           Time const r )
 {
     REQUIRE( time__is_valid( l ), time__is_valid( r ) );
 
     return time__from_seconds( time__to_seconds( l ) + time__to_seconds( r ) );
 }
+
+
+Time
+time__sub( Time const l,
+           Time const r )
+{
+    REQUIRE( time__is_valid( l ), time__is_valid( r ) );
+
+    return time__from_seconds( time__to_seconds( l ) - time__to_seconds( r ) );
+}
+
 

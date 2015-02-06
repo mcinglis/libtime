@@ -64,6 +64,8 @@ bool time__greater_than( Time, Time );
 
 Time time__add( Time, Time );
 
+Time time__sub( Time, Time );
+
 
 #endif
 
