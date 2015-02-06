@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include <libtypes/types.h>
+#include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libmacro/require.h>
 #include <libbase/long.h>
@@ -107,6 +108,60 @@ timespec__from_str( char const * const str )
         errno = EBADMSG;
         return ( struct timespec ){ 0 };
     }
+}
+
+
+ord
+timespec__compare( struct timespec const l,
+                   struct timespec const r )
+{
+    REQUIRE( timespec__is_valid( l ), timespec__is_valid( r ) );
+
+    ord const sec = COMPARE( l.tv_sec, r.tv_sec );
+    if ( sec != EQ ) {
+        return sec;
+    }
+    return COMPARE( l.tv_nsec, r.tv_nsec );
+}
+
+
+bool
+timespec__less_than_or_eq( struct timespec const l,
+                           struct timespec const r )
+{
+    return timespec__compare( l, r ) <= EQ;
+}
+
+
+bool
+timespec__equal( struct timespec const l,
+                 struct timespec const r )
+{
+    return timespec__compare( l, r ) == EQ;
+}
+
+
+bool
+timespec__not_equal( struct timespec const l,
+                     struct timespec const r )
+{
+    return timespec__compare( l, r ) != EQ;
+}
+
+
+bool
+timespec__greater_than_or_eq( struct timespec const l,
+                              struct timespec const r )
+{
+    return timespec__compare( l, r ) >= EQ;
+}
+
+
+bool
+timespec__greater_than( struct timespec const l,
+                        struct timespec const r )
+{
+    return timespec__compare( l, r ) == GT;
 }
 
 

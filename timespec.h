@@ -59,6 +59,18 @@ timespec__add( struct timespec,
                struct timespec );
 
 
+ord timespec__compare( struct timespec, struct timespec );
+
+bool timespec__less_than( struct timespec, struct timespec );
+bool timespec__less_than_or_eq( struct timespec, struct timespec );
+
+bool timespec__equal( struct timespec, struct timespec );
+bool timespec__not_equal( struct timespec, struct timespec );
+
+bool timespec__greater_than_or_eq( struct timespec, struct timespec );
+bool timespec__greater_than( struct timespec, struct timespec );
+
+
 struct timespec
 timespec__from_str( char const * str );
 
