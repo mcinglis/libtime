@@ -6,10 +6,10 @@
 #include <time.h>
 
 #include <libtypes/types.h>
+#include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libmacro/minmax.h>    // MIN
-#include <libmacro/require.h>
 
 #include "tm.h"
 
@@ -64,9 +64,7 @@ time__from_seconds( time_t s )
 
 time_t
 time__to_seconds( Time const t )
-{
-    REQUIRE( time__is_valid( t ) );
-
+{ ASSERT( time__is_valid( t ) );
     return t.seconds + ( t.minutes * 60 ) + ( t.hour * 60 * 60 );
 }
 
@@ -74,9 +72,7 @@ time__to_seconds( Time const t )
 ord
 time__compare( Time const l,
                Time const r )
-{
-    REQUIRE( time__is_valid( l ), time__is_valid( r ) );
-
+{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
     ord const hour = COMPARE( l.hour, r.hour );
     if ( hour != EQ ) {
         return hour;
@@ -140,9 +136,7 @@ time__greater_than( Time const l,
 Time
 time__add( Time const l,
            Time const r )
-{
-    REQUIRE( time__is_valid( l ), time__is_valid( r ) );
-
+{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
     return time__from_seconds( time__to_seconds( l ) + time__to_seconds( r ) );
 }
 
@@ -150,9 +144,7 @@ time__add( Time const l,
 Time
 time__sub( Time const l,
            Time const r )
-{
-    REQUIRE( time__is_valid( l ), time__is_valid( r ) );
-
+{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
     return time__from_seconds( time__to_seconds( l ) - time__to_seconds( r ) );
 }
 

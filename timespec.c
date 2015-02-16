@@ -11,8 +11,7 @@
 #include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
-#include <libmacro/require.h>
-#include <libbase/long.h>
+#include <libbase/intmax.h>
 #include <libbase/str.h>
 
 
@@ -47,23 +46,10 @@ timespec__get_monotonic( void )
 }
 
 
-bool
-timespec__can_add( struct timespec const l,
-                   struct timespec const r )
-{
-    REQUIRE( timespec__is_valid( l ), timespec__is_valid( r ) );
-
-    return long__can_add( l.tv_sec, r.tv_sec )
-        && long__can_add( l.tv_nsec, r.tv_nsec );
-}
-
-
 struct timespec
 timespec__add( struct timespec const l,
                struct timespec const r )
-{
-    REQUIRE( timespec__is_valid( l ), timespec__is_valid( r ) );
-
+{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
     time_t const sec = l.tv_sec + r.tv_sec;
     long const nsec = l.tv_nsec + r.tv_nsec;
     if ( nsec > TIMESPEC_MAX_NSEC ) {
@@ -79,9 +65,7 @@ timespec__add( struct timespec const l,
 struct timespec
 timespec__sub( struct timespec const l,
                struct timespec const r )
-{
-    REQUIRE( timespec__is_valid( l ), timespec__is_valid( r ) );
-
+{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
     time_t const sec = l.tv_sec - r.tv_sec;
     long const nsec = l.tv_nsec - r.tv_nsec;
     if ( nsec < 0 ) {
@@ -96,9 +80,7 @@ timespec__sub( struct timespec const l,
 
 struct timespec
 timespec__from_str( char const * const str )
-{
-    REQUIRE( str != NULL );
-
+{ ASSERT( str != NULL );
     errno = 0;
     if ( str[ 0 ] == '\0' ) {
         errno = EBADMSG;
@@ -135,10 +117,9 @@ size_t
 timespec__to_str( struct timespec const ts,
                   char * const str,
                   size_t const size )
-{
-    REQUIRE( str != NULL );
-
-    int const n = snprintf( str, size, "%lus%ldns", ts.tv_sec, ts.tv_nsec );
+{ ASSERT( str != NULL );
+    int const n = snprintf( str, size - 1, "%lus%ldns",
+                            ts.tv_sec, ts.tv_nsec );
     str[ size - 1 ] = '\0';
     if ( n < 0 ) {
         ASSERT( errno != 0 );
@@ -153,9 +134,7 @@ timespec__to_str( struct timespec const ts,
 ord
 timespec__compare( struct timespec const l,
                    struct timespec const r )
-{
-    REQUIRE( timespec__is_valid( l ), timespec__is_valid( r ) );
-
+{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
     ord const sec = COMPARE( l.tv_sec, r.tv_sec );
     if ( sec != EQ ) {
         return sec;

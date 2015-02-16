@@ -1,10 +1,12 @@
 
 #include "date.h"
 
+#include <limits.h>
+
 #include <libtypes/types.h>
+#include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
-#include <libmacro/require.h>
 
 #include "tm.h"
 
@@ -18,12 +20,12 @@ date__is_valid( Date const d )
 
 Date
 date__from_tm( struct tm const tm )
-{
-    Date const d = { .year  = tm.tm_year + 1900,
+{ ASSERT( tm.tm_year <= ( INT_MAX - 1900 ),
+          0 <= tm.tm_mon, tm.tm_mon <= 11,
+          0 <= tm.tm_mday, tm.tm_mday <= 31 );
+    return ( Date ){ .year  = tm.tm_year + 1900,
                      .month = tm.tm_mon + 1,
                      .day   = tm.tm_mday };
-    REQUIRE( date__is_valid( d ) );
-    return d;
 }
 
 
@@ -44,9 +46,7 @@ date__local_from_timespec( struct timespec const ts )
 ord
 date__compare( Date const l,
                Date const r )
-{
-    REQUIRE( date__is_valid( l ), date__is_valid( r ) );
-
+{ ASSERT( date__is_valid( l ), date__is_valid( r ) );
     ord const year = COMPARE( l.year, r.year );
     if ( year != EQ ) {
         return year;

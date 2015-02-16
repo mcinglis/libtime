@@ -49,11 +49,6 @@ struct timespec
 timespec__get_monotonic( void );
 
 
-bool
-timespec__can_add( struct timespec,
-                   struct timespec );
-
-
 struct timespec
 timespec__add( struct timespec,
                struct timespec );
