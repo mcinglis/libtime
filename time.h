@@ -67,5 +67,9 @@ Time time__add( Time, Time );
 Time time__sub( Time, Time );
 
 
+Time
+time__from_str( char const * str );
+
+
 #endif
 

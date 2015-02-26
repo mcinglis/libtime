@@ -49,7 +49,9 @@ timespec__get_monotonic( void )
 struct timespec
 timespec__add( struct timespec const l,
                struct timespec const r )
-{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+{
+    ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+
     time_t const sec = l.tv_sec + r.tv_sec;
     long const nsec = l.tv_nsec + r.tv_nsec;
     if ( nsec > TIMESPEC_MAX_NSEC ) {
@@ -65,7 +67,9 @@ timespec__add( struct timespec const l,
 struct timespec
 timespec__sub( struct timespec const l,
                struct timespec const r )
-{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+{
+    ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+
     time_t const sec = l.tv_sec - r.tv_sec;
     long const nsec = l.tv_nsec - r.tv_nsec;
     if ( nsec < 0 ) {
@@ -80,7 +84,9 @@ timespec__sub( struct timespec const l,
 
 struct timespec
 timespec__from_str( char const * const str )
-{ ASSERT( str != NULL );
+{
+    ASSERT( str != NULL );
+
     errno = 0;
     if ( str[ 0 ] == '\0' ) {
         errno = EBADMSG;
@@ -117,7 +123,9 @@ size_t
 timespec__to_str( struct timespec const ts,
                   char * const str,
                   size_t const size )
-{ ASSERT( str != NULL );
+{
+    ASSERT( str != NULL );
+
     int const n = snprintf( str, size - 1, "%lus%ldns",
                             ts.tv_sec, ts.tv_nsec );
     str[ size - 1 ] = '\0';
@@ -134,7 +142,9 @@ timespec__to_str( struct timespec const ts,
 ord
 timespec__compare( struct timespec const l,
                    struct timespec const r )
-{ ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+{
+    ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+
     ord const sec = COMPARE( l.tv_sec, r.tv_sec );
     if ( sec != EQ ) {
         return sec;

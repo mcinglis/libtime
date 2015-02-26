@@ -2,7 +2,7 @@
 #include "time.h"
 
 #include <errno.h>
-
+#include <stdlib.h>
 #include <time.h>
 
 #include <libtypes/types.h>
@@ -64,7 +64,9 @@ time__from_seconds( time_t s )
 
 time_t
 time__to_seconds( Time const t )
-{ ASSERT( time__is_valid( t ) );
+{
+    ASSERT( time__is_valid( t ) );
+
     return t.seconds + ( t.minutes * 60 ) + ( t.hour * 60 * 60 );
 }
 
@@ -72,7 +74,9 @@ time__to_seconds( Time const t )
 ord
 time__compare( Time const l,
                Time const r )
-{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
+{
+    ASSERT( time__is_valid( l ), time__is_valid( r ) );
+
     ord const hour = COMPARE( l.hour, r.hour );
     if ( hour != EQ ) {
         return hour;
@@ -136,7 +140,9 @@ time__greater_than( Time const l,
 Time
 time__add( Time const l,
            Time const r )
-{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
+{
+    ASSERT( time__is_valid( l ), time__is_valid( r ) );
+
     return time__from_seconds( time__to_seconds( l ) + time__to_seconds( r ) );
 }
 
@@ -144,8 +150,55 @@ time__add( Time const l,
 Time
 time__sub( Time const l,
            Time const r )
-{ ASSERT( time__is_valid( l ), time__is_valid( r ) );
+{
+    ASSERT( time__is_valid( l ), time__is_valid( r ) );
+
     return time__from_seconds( time__to_seconds( l ) - time__to_seconds( r ) );
 }
 
+
+Time
+time__from_str( char const * const str )
+{
+    ASSERT( str != NULL );
+
+    errno = 0;
+    if ( str[ 0 ] == '\0' ) {
+        errno = EBADMSG;
+        return ( Time ){ 0 };
+    }
+    char * end1;
+    long const hour = strtol( str, &end1, 10 );
+    if ( errno ) {
+        return ( Time ){ 0 };
+    } else if ( end1[ 0 ] != ':' ) {
+        errno = EBADMSG;
+        return ( Time ){ 0 };
+    }
+    char * end2;
+    long const minutes = strtol( end1 + 1, &end2, 10 );
+    if ( errno ) {
+        return ( Time ){ 0 };
+    }
+    long seconds = 0;
+    if ( end2[ 0 ] == ':' ) {
+        char * end3;
+        seconds = strtol( end2 + 1, &end3, 10 );
+        if ( errno ) {
+            return ( Time ){ 0 };
+        } else if ( end3[ 0 ] != '\0' ) {
+            errno = EBADMSG;
+            return ( Time ){ 0 };
+        }
+    } else if ( end2[ 0 ] != '\0' ) {
+        errno = EBADMSG;
+        return ( Time ){ 0 };
+    }
+    Time const t = { .hour = hour, .minutes = minutes, .seconds = seconds };
+    if ( !time__is_valid( t ) ) {
+        errno = ERANGE;
+        return ( Time ){ 0 };
+    }
+    return t;
+}
 
