@@ -18,12 +18,14 @@ datetime__is_valid( DateTime const dt )
 
 DateTime
 datetime__from_tm( struct tm const tm )
-{ ASSERT( tm.tm_year <= ( INT_MAX - 1900 ),
-          0 <= tm.tm_mon,  tm.tm_mon  <= 11,
-          0 <= tm.tm_mday, tm.tm_mday <= 31,
-          0 <= tm.tm_hour, tm.tm_hour <= 23,
-          0 <= tm.tm_min,  tm.tm_min  <= 59,
-          0 <= tm.tm_sec,  tm.tm_sec  <= 60 );
+{
+    ASSERT( tm.tm_year <= ( INT_MAX - 1900 ),
+            0 <= tm.tm_mon,  tm.tm_mon  <= 11,
+            0 <= tm.tm_mday, tm.tm_mday <= 31,
+            0 <= tm.tm_hour, tm.tm_hour <= 23,
+            0 <= tm.tm_min,  tm.tm_min  <= 59,
+            0 <= tm.tm_sec,  tm.tm_sec  <= 60 );
+
     return ( DateTime ){ .year    = tm.tm_year + 1900,
                          .month   = tm.tm_mon + 1,
                          .day     = tm.tm_mday,
