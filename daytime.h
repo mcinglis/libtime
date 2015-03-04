@@ -71,5 +71,11 @@ DayTime
 daytime__from_str( char const * str );
 
 
+void
+arg_parse_daytime( char const * name,
+                   char const * arg,
+                   void * destination );
+
+
 #endif
 

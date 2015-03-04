@@ -205,3 +205,17 @@ daytime__from_str( char const * const str )
     return t;
 }
 
+
+void
+arg_parse_daytime( char const * const name,
+                   char const * const arg,
+                   void * const vdest )
+{
+    if ( vdest == NULL ) {
+        errno = EINVAL;
+    } else {
+        DayTime * const dt = vdest;
+        *dt = daytime__from_str( arg );
+    }
+}
+

@@ -48,5 +48,11 @@ time_t
 time__from_str( char const * str );
 
 
+void
+arg_parse_time( char const * name,
+                char const * arg,
+                void * destination );
+
+
 #endif // ifndef LIBTIME_DAYPERIOD_H
 
