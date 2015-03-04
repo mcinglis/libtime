@@ -1,6 +1,10 @@
 
 #include "time.h"
 
+#include <ctype.h>
+#include <errno.h>
+#include <inttypes.h>
+
 #include <libmacro/bound.h>     // MIN_BOUND, MAX_BOUND
 
 

@@ -12,7 +12,7 @@
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libbase/intmax.h>
-#include <libbase/str.h>
+#include <libstr/str.h>
 
 
 bool
