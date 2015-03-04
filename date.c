@@ -32,9 +32,9 @@ date__from_tm( struct tm const tm )
 
 
 Date
-date__local_from_time_t( time_t const t )
+date__local_from_time( time_t const t )
 {
-    return date__from_tm( tm__local_from_time_t( t ) );
+    return date__from_tm( tm__local_from_time( t ) );
 }
 
 

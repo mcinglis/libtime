@@ -17,8 +17,8 @@
 // along with Libtime. If not, see <https://gnu.org/licenses/>.
 
 
-#ifndef LIBTIME_TIME_H
-#define LIBTIME_TIME_H
+#ifndef LIBTIME_DAYTIME_H
+#define LIBTIME_DAYTIME_H
 
 
 #include <time.h>
@@ -26,49 +26,49 @@
 #include <libtypes/types.h>
 
 
-typedef struct time {
+typedef struct daytime {
     uchar hour;         // 0 - 23
     uchar minutes;      // 0 - 59
     uchar seconds;      // 0 - 60 (for leap seconds)
-} Time;
+} DayTime;
 
 
-#define TIME_INVARIANTS( t ) \
+#define DAYTIME_INVARIANTS( t ) \
     ( ( t ).hour <= 23 ), \
     ( ( t ).minutes <= 59 ), \
     ( ( t ).seconds <= 60 )
 
-bool time__is_valid( Time );
+bool daytime__is_valid( DayTime );
 
 
-Time time__from_tm( struct tm );
-Time time__from_seconds( time_t );
+DayTime daytime__from_tm( struct tm );
+DayTime daytime__from_seconds( time_t );
 
-Time time__local_from_time_t( time_t );
-Time time__local_from_timespec( struct timespec );
+DayTime daytime__local_from_time( time_t );
+DayTime daytime__local_from_timespec( struct timespec );
 
-time_t time__to_seconds( Time );
-
-
-ord time__compare( Time, Time );
-
-bool time__less_than( Time, Time );
-bool time__less_than_or_eq( Time, Time );
-
-bool time__equal( Time, Time );
-bool time__not_equal( Time, Time );
-
-bool time__greater_than_or_eq( Time, Time );
-bool time__greater_than( Time, Time );
+time_t daytime__to_seconds( DayTime );
 
 
-Time time__add( Time, Time );
+ord daytime__compare( DayTime, DayTime );
 
-Time time__sub( Time, Time );
+bool daytime__less_than( DayTime, DayTime );
+bool daytime__less_than_or_eq( DayTime, DayTime );
+
+bool daytime__equal( DayTime, DayTime );
+bool daytime__not_equal( DayTime, DayTime );
+
+bool daytime__greater_than_or_eq( DayTime, DayTime );
+bool daytime__greater_than( DayTime, DayTime );
 
 
-Time
-time__from_str( char const * str );
+DayTime daytime__add( DayTime, DayTime );
+
+DayTime daytime__sub( DayTime, DayTime );
+
+
+DayTime
+daytime__from_str( char const * str );
 
 
 #endif

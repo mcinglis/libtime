@@ -25,22 +25,22 @@
 
 #include <libtypes/types.h>
 
-#include "time.h"
+#include "daytime.h"
 
 
 typedef struct dayperiod {
-    Time start;
+    DayTime start;
     time_t duration;
 } DayPeriod;
 
 
-Time
+DayTime
 dayperiod__end( DayPeriod );
 
 
 bool
 dayperiod__contains( DayPeriod,
-                     Time );
+                     DayTime );
 
 
 #endif // ifndef LIBTIME_DAYPERIOD_H

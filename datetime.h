@@ -25,7 +25,7 @@
 
 #include <libtypes/types.h>
 
-#include "time.h"
+#include "daytime.h"
 #include "date.h"
 
 
@@ -53,11 +53,11 @@ bool datetime__is_valid( DateTime );
 
 DateTime datetime__from_tm( struct tm );
 
-DateTime datetime__local_from_time_t( time_t );
+DateTime datetime__local_from_time( time_t );
 DateTime datetime__local_from_timespec( struct timespec );
 
 Date datetime__date( DateTime );
-Time datetime__time( DateTime );
+DayTime datetime__daytime( DateTime );
 
 
 #endif

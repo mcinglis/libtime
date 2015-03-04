@@ -1,19 +1,21 @@
 
 #include "dayperiod.h"
 
+#include "daytime.h"
 
-Time
+
+DayTime
 dayperiod__end( DayPeriod const dp )
 {
-    return time__add( dp.start, time__from_seconds( dp.duration ) );
+    return daytime__add( dp.start, daytime__from_seconds( dp.duration ) );
 }
 
 
 bool
 dayperiod__contains( DayPeriod const dp,
-                     Time const t )
+                     DayTime const t )
 {
-    return time__less_than_or_eq( dp.start, t )
-        && time__less_than_or_eq( t, dayperiod__end( dp ) );
+    return daytime__less_than_or_eq( dp.start, t )
+        && daytime__less_than_or_eq( t, dayperiod__end( dp ) );
 }
 

@@ -36,9 +36,9 @@ datetime__from_tm( struct tm const tm )
 
 
 DateTime
-datetime__local_from_time_t( time_t const t )
+datetime__local_from_time( time_t const t )
 {
-    return datetime__from_tm( tm__local_from_time_t( t ) );
+    return datetime__from_tm( tm__local_from_time( t ) );
 }
 
 
@@ -51,19 +51,23 @@ datetime__local_from_timespec( struct timespec const ts )
 
 Date
 datetime__date( DateTime const dt )
-{ ASSERT( datetime__is_valid( dt ) );
+{
+    ASSERT( datetime__is_valid( dt ) );
+
     return ( Date ){ .year  = dt.year,
                      .month = dt.month,
                      .day   = dt.day };
 }
 
 
-Time
+DayTime
 datetime__time( DateTime const dt )
-{ ASSERT( datetime__is_valid( dt ) );
-    return ( Time ){ .hour    = dt.hour,
-                     .minutes = dt.minutes,
-                     .seconds = dt.seconds };
+{
+    ASSERT( datetime__is_valid( dt ) );
+
+    return ( DayTime ){ .hour    = dt.hour,
+                        .minutes = dt.minutes,
+                        .seconds = dt.seconds };
 }
 
 
