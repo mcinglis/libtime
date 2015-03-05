@@ -1,5 +1,6 @@
 {
     "dependencies": [
+        { "repo": "https://gitorious.org/mcinglis/render-jinja.git" },
         { "repo": "https://gitorious.org/mcinglis/libtypes.git",
           "tag":  "v3.*" },
         { "repo": "https://gitorious.org/mcinglis/libmacro.git",
