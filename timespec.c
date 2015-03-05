@@ -11,8 +11,11 @@
 #include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
+#include <libbase/long.h>
 #include <libbase/intmax.h>
 #include <libstr/str.h>
+
+#include "time.h"
 
 
 bool
@@ -46,37 +49,71 @@ timespec__get_monotonic( void )
 }
 
 
-struct timespec
-timespec__add( struct timespec const l,
-               struct timespec const r )
+bool
+timespec__can_add( struct timespec const x,
+                   struct timespec const y )
 {
-    ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+    ASSERT( timespec__is_valid( x ), timespec__is_valid( y ) );
 
-    time_t const sec = l.tv_sec + r.tv_sec;
-    long const nsec = l.tv_nsec + r.tv_nsec;
+    long const nsec = long__add_b( x.tv_nsec, y.tv_nsec );
     if ( nsec > TIMESPEC_MAX_NSEC ) {
-        return ( struct timespec ){ .tv_sec = sec + 1,
-                                    .tv_nsec = nsec - TIMESPEC_MAX_NSEC };
+        return time__can_add( x.tv_sec, 1 )
+            && time__can_add( x.tv_sec + 1, y.tv_sec );
     } else {
-        return ( struct timespec ){ .tv_sec = sec,
-                                    .tv_nsec = nsec };
+        return time__can_add( x.tv_sec, y.tv_sec );
     }
 }
 
 
 struct timespec
-timespec__sub( struct timespec const l,
-               struct timespec const r )
+timespec__add( struct timespec const x,
+               struct timespec const y )
 {
-    ASSERT( timespec__is_valid( l ), timespec__is_valid( r ) );
+    ASSERT( timespec__is_valid( x ),
+            timespec__is_valid( y ),
+            timespec__can_add( x, y ) );
 
-    time_t const sec = l.tv_sec - r.tv_sec;
-    long const nsec = l.tv_nsec - r.tv_nsec;
-    if ( nsec < 0 ) {
-        return ( struct timespec ){ .tv_sec = sec - 1,
-                                    .tv_nsec = nsec + TIMESPEC_MAX_NSEC };
+    long const nsec = long__add_b( x.tv_nsec, y.tv_nsec );
+    if ( nsec > TIMESPEC_MAX_NSEC ) {
+        return ( struct timespec ){ .tv_sec = x.tv_sec + y.tv_sec + 1,
+                                    .tv_nsec = nsec - TIMESPEC_MAX_NSEC };
     } else {
-        return ( struct timespec ){ .tv_sec = sec,
+        return ( struct timespec ){ .tv_sec = x.tv_sec + y.tv_sec,
+                                    .tv_nsec = nsec };
+    }
+}
+
+
+bool
+timespec__can_sub( struct timespec const x,
+                   struct timespec const y )
+{
+    ASSERT( timespec__is_valid( x ), timespec__is_valid( y ) );
+
+    long const nsec = long__sub_b( x.tv_nsec, y.tv_nsec );
+    if ( nsec < 0 ) {
+        return time__can_sub( x.tv_sec, 1 )
+            && time__can_sub( x.tv_sec - 1, y.tv_sec );
+    } else {
+        return time__can_sub( x.tv_sec, y.tv_sec );
+    }
+}
+
+
+struct timespec
+timespec__sub( struct timespec const x,
+               struct timespec const y )
+{
+    ASSERT( timespec__is_valid( x ),
+            timespec__is_valid( y ),
+            timespec__can_sub( x, y ) );
+
+    long const nsec = long__sub_b( x.tv_nsec, y.tv_nsec );
+    if ( nsec < 0 ) {
+        return ( struct timespec ){ .tv_sec = x.tv_sec - y.tv_sec - 1,
+                                    .tv_nsec = nsec + TIMESPEC_MAX_NSEC + 1 };
+    } else {
+        return ( struct timespec ){ .tv_sec = x.tv_sec - y.tv_sec,
                                     .tv_nsec = nsec };
     }
 }
