@@ -131,10 +131,10 @@ timespec__from_str( char const * const str )
     }
     char * end1;
     long const l1 = strtol( str, &end1, 10 );
-    if ( errno != 0 ) {
+    if ( errno ) {
         return ( struct timespec ){ 0 };
     }
-    if ( str__equal_i( end1, "s" ) ) {
+    if ( str__equal( end1, "" ) || str__equal_i( end1, "s" ) ) {
         return ( struct timespec ){ .tv_sec = l1 };
     } else if ( str__equal_i( end1, "ns" ) ) {
         return ( struct timespec ){ .tv_nsec = l1 };
@@ -147,7 +147,7 @@ timespec__from_str( char const * const str )
     if ( errno != 0 ) {
         return ( struct timespec ){ 0 };
     }
-    if ( end2[ 0 ] == '\0' || str__equal_i( end2, "ns" ) ) {
+    if ( str__equal_i( end2, "ns" ) ) {
         return ( struct timespec ){ .tv_sec = l1, .tv_nsec = l2 };
     } else {
         errno = EBADMSG;
