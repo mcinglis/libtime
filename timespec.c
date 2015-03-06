@@ -75,11 +75,13 @@ timespec__add( struct timespec const x,
 
     long const nsec = long__add_b( x.tv_nsec, y.tv_nsec );
     if ( nsec > TIMESPEC_MAX_NSEC ) {
-        return ( struct timespec ){ .tv_sec = x.tv_sec + y.tv_sec + 1,
-                                    .tv_nsec = nsec - TIMESPEC_MAX_NSEC };
+        return ( struct timespec ){
+                   .tv_sec = x.tv_sec + y.tv_sec + 1,
+                   .tv_nsec = nsec - TIMESPEC_MAX_NSEC - 1 };
     } else {
-        return ( struct timespec ){ .tv_sec = x.tv_sec + y.tv_sec,
-                                    .tv_nsec = nsec };
+        return ( struct timespec ){
+                   .tv_sec = x.tv_sec + y.tv_sec,
+                   .tv_nsec = nsec };
     }
 }
 
@@ -110,11 +112,13 @@ timespec__sub( struct timespec const x,
 
     long const nsec = long__sub_b( x.tv_nsec, y.tv_nsec );
     if ( nsec < 0 ) {
-        return ( struct timespec ){ .tv_sec = x.tv_sec - y.tv_sec - 1,
-                                    .tv_nsec = nsec + TIMESPEC_MAX_NSEC + 1 };
+        return ( struct timespec ){
+                   .tv_sec = x.tv_sec - y.tv_sec - 1,
+                   .tv_nsec = nsec + TIMESPEC_MAX_NSEC + 1 };
     } else {
-        return ( struct timespec ){ .tv_sec = x.tv_sec - y.tv_sec,
-                                    .tv_nsec = nsec };
+        return ( struct timespec ){
+                   .tv_sec = x.tv_sec - y.tv_sec,
+                   .tv_nsec = nsec };
     }
 }
 
