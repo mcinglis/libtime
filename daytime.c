@@ -207,15 +207,13 @@ daytime__from_str( char const * const str )
 
 
 void
-arg_parse_daytime( char const * const name,
-                   char const * const arg,
-                   void * const vdest )
+daytime__arg_parse( char const * const name,
+                    char const * const arg,
+                    void * const vdest )
 {
-    if ( vdest == NULL ) {
-        errno = EINVAL;
-    } else {
-        DayTime * const dt = vdest;
-        *dt = daytime__from_str( arg );
-    }
+    ASSERT( arg != NULL, vdest != NULL );
+
+    DayTime * const dt = vdest;
+    *dt = daytime__from_str( arg );
 }
 
