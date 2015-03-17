@@ -1,5 +1,5 @@
 
-**Libtime** makes it easier to work with dates and times. It provides `Time`, `Date`, `DateTime`, and `TimePeriod` structs, and accompanying functions. It also provides some functions for working with the standard POSIX `struct tm` and `struct timespec` types.
+**Libtime** makes it easier to work with dates and times. It provides `Time`, `Date`, `DateTime`, and `TimePeriod` structs, and accompanying functions. It also provides some functions for working with the standard POSIX `time_t`, `struct tm` and `struct timespec` types.
 
 
 ## Releases
@@ -16,6 +16,8 @@ Every version tag will be signed with [my GPG key](http://pool.sks-keyservers.ne
 ``` sh
 $ puck update
 $ puck execute build
+# Now you can:
+$ make
 ```
 
 There's nothing magic to what Puck does, so if you would prefer, you can set up the dependencies manually. You just need to have the dependencies in the `deps` directory within the Libtime directory, and have them built (if necessary) before building Libtime
@@ -23,7 +25,7 @@ There's nothing magic to what Puck does, so if you would prefer, you can set up 
 
 ## Collaboration
 
-Libtime is available at [Gitorious](https://gitorious.org/mcinglis/libtime), [Bitbucket](https://bitbucket.org/mcinglis/libtime), and [GitHub](https://github.com/mcinglis/libtime).
+Libtime is available at [Bitbucket](https://bitbucket.org/mcinglis/libtime) and [GitHub](https://github.com/mcinglis/libtime).
 
 Questions, discussion, bug reports and feature requests are welcome at [the GitHub issue tracker](https://github.com/mcinglis/libtime/issues), or via [emails](mailto:me@minglis.id.au).
 
