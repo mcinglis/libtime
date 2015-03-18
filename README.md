@@ -1,10 +1,10 @@
 
-**Libtime** makes it easier to work with dates and times. It provides `Time`, `Date`, `DateTime`, and `TimePeriod` structs, and accompanying functions. It also provides some functions for working with the standard POSIX `time_t`, `struct tm` and `struct timespec` types.
+**Libtime** makes it easier to work with dates and times. It provides `Date`, `DateTime`, `DayPeriod`, and `TimePeriod` structs, and accompanying functions. It also provides functions for working with the standard POSIX `struct tm` and `struct timespec` types.
 
 
 ## Releases
 
-I'll tag the releases according to [semantic versioning](http://semver.org/spec/v2.0.0.html). All the macros preceded by `// @public` are considered public: they'll only change between major versions. The other macros could change any time. Non-preprocessor identifiers defined in header files are always considered public. New identifiers prefixed with the name of the header file will not warrant a major version bump: e.g., a function `time_period__foo()` may be added to `time-period.h` between minor versions.
+I'll tag the releases according to [semantic versioning](http://semver.org/spec/v2.0.0.html). All the macros preceded by `// @public` are considered public: they'll only change between major versions. The other macros could change any time. Non-preprocessor identifiers defined in header files are always considered public. New identifiers prefixed with the name of the header file will not warrant a major version bump: e.g., a function `timeperiod__foo()` may be added to `timeperiod.h` between minor versions.
 
 Every version tag will be signed with [my GPG key](http://pool.sks-keyservers.net/pks/lookup?op=vindex&search=0xD020F814) (fingerprint: `0xD020F814`).
 
@@ -20,7 +20,11 @@ $ puck execute build
 $ make
 ```
 
-There's nothing magic to what Puck does, so if you would prefer, you can set up the dependencies manually. You just need to have the dependencies in the `deps` directory within the Libtime directory, and have them built (if necessary) before building Libtime
+There's nothing magic to what Puck does, so if you would prefer, you can set up the dependencies manually. You just need to have the dependencies in the `deps` directory within the Libtime directory, and have them built (if necessary) before building Libtime.
+
+There is no `build` command specified for Libtime, because you should manage the building of Libtime's sources in your own project. Because `timespec.c` and `timeperiod.c` depend on files generated from Libbase, you would want to have that process integrated with the rest of your project.
+
+Despite this, there is a `Makefile` provided with the bare minimum to build to the object files. This is primarly to aid in development; checking that the code can actually compile.
 
 
 ## Collaboration

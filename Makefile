@@ -3,7 +3,7 @@
 ### VARIABLES
 ##############################
 
-DEPS_DIR ?= ./deps
+DEPS_DIR ?= deps
 
 LIBBASE  ?= $(DEPS_DIR)/libbase
 LIBSTR   ?= $(DEPS_DIR)/libstr
@@ -23,42 +23,19 @@ CFLAGS ?= $(cflags_std) -g $(cflags_warnings)
 TPLRENDER ?= $(DEPS_DIR)/tplrender/tplrender
 
 
-libbase_types  := long intmax
-libtime_types  := time
+libbase_types  := long intmax time
 
 long_type    := long
-long_options := --typeclasses BOUNDED EQ ORD ENUM NUM FROM_STR TO_STRM \
-                --extra num_type=signed
+long_options := --typeclasses NUM
 
 intmax_type    := intmax_t
-intmax_options := --typeclasses BOUNDED EQ ORD ENUM NUM FROM_STR TO_STRM \
-                  --extra num_type=signed
-
-size_type    := size_t
-size_options := --typeclasses BOUNDED EQ ORD ENUM NUM FROM_STR TO_STRM \
-                --extra num_type=unsigned
+intmax_options := --typeclasses NUM
 
 time_type    := time_t
-time_options := --typeclasses BOUNDED EQ ORD ENUM NUM FROM_STR TO_STRM \
-                --sys-headers time.h libmacro/bound.h \
-                --extra num_type=signed \
-                        min_bound="MIN_BOUND( ( time_t ) 0 )" \
-                        max_bound="MAX_BOUND( ( time_t ) 0 )"
+time_options := --typeclasses NUM --sys-headers time.h
 
-libbase_sources := $(foreach t,$(libbase_types),$(LIBBASE)/$t.c)
-libbase_headers := $(libbase_sources:.c=.h)
-libbase_objects := $(libbase_sources:.c=.o)
+libbase_headers := $(foreach t,$(libbase_types),$(LIBBASE)/$t.h)
 
-libtime_sources := $(addsuffix .c,$(libtime_types))
-libtime_headers := $(libtime_sources:.c=.h)
-libtime_objects := $(libtime_sources:.c=.o)
-
-gen_objects := $(libbase_objects) $(libtime_objects)
-gen := $(libbase_sources) \
-       $(libbase_headers) \
-       $(libtime_sources) \
-       $(libtime_headers) \
-       $(gen_objects)
 
 sources := $(wildcard *.c)
 objects := $(sources:.c=.o)
@@ -72,17 +49,12 @@ mkdeps  := $(objects:.o=.dep.mk)
 .PHONY: all
 all: objects
 
-.PHONY: fast
-fast: CPPFLAGS += -DNDEBUG
-fast: CFLAGS = $(cflags_std) -O3 $(cflags_warnings)
-fast: all
-
 .PHONY: objects
-objects: $(objects) $(gen_objects)
+objects: $(objects)
 
 .PHONY: clean
 clean:
-	rm -rf $(objects) $(gen) $(mkdeps)
+	rm -rf $(objects) $(libbase_headers) $(mkdeps)
 
 
 %.o: %.c
@@ -92,29 +64,14 @@ clean:
 timeperiod.o: $(LIBBASE)/intmax.h
 
 timespec.o: $(LIBBASE)/long.h \
-            time.h
+            $(LIBBASE)/time.h
+
 
 name_from_path = $(subst -,_,$1)
 
 $(libbase_headers): $(LIBBASE)/%.h: $(LIBBASE)/header.h.jinja
 	$(eval n := $(call name_from_path,$*))
 	$(TPLRENDER) $< "$($(n)_type)" $($(n)_options) -o $@
-
-$(libbase_sources): $(LIBBASE)/%.c: $(LIBBASE)/source.c.jinja
-	$(eval n := $(call name_from_path,$*))
-	$(TPLRENDER) $< "$($(n)_type)" $($(n)_options) -o $@
-
-$(libbase_objects): $(LIBBASE)/%.o: $(LIBBASE)/%.h
-
-$(libtime_headers): $(LIBBASE)/header.h.jinja
-	$(eval n := $(call name_from_path,$*))
-	$(TPLRENDER) $< "$($(n)_type)" $($(n)_options) -o $@
-
-$(libtime_sources): $(LIBBASE)/source.c.jinja
-	$(eval n := $(call name_from_path,$*))
-	$(TPLRENDER) $< "$($(n)_type)" $($(n)_options) -o $@
-
-$(libtime_objects): %.o: %.h
 
 
 -include $(mkdeps)

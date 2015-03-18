@@ -1,5 +1,3 @@
-time.c
-time.h
 *.o
 *.dep.mk
 deps

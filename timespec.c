@@ -12,10 +12,8 @@
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libbase/long.h>
-#include <libbase/intmax.h>
+#include <libbase/time.h>
 #include <libstr/str.h>
-
-#include "time.h"
 
 
 bool
