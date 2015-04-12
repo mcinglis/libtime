@@ -2,6 +2,7 @@
 #include "date.h"
 
 #include <limits.h>
+#include <stdio.h>
 
 #include <libtypes/types.h>
 #include <libmacro/assert.h>
@@ -108,5 +109,21 @@ date__greater_than( Date const l,
                     Date const r )
 {
     return date__compare( l, r ) == GT;
+}
+
+
+Date
+date__from_str(
+        char const * const str )
+{
+    ASSERT( str != NULL );
+
+    uint year;
+    uint month;
+    uint day;
+    sscanf( str, "%4u-%2u-%2u", &year, &month, &day );
+    Date const d = { .year = year, .month = month, .day = day };
+    ASSERT( DATE_INVARIANTS( d ) );
+    return d;
 }
 

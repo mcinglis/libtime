@@ -59,5 +59,8 @@ bool date__greater_than_or_eq( Date, Date );
 bool date__greater_than( Date, Date );
 
 
+Date date__from_str( char const * );
+
+
 #endif
 
