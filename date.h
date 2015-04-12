@@ -62,5 +62,12 @@ bool date__greater_than( Date, Date );
 Date date__from_str( char const * );
 
 
+size_t
+date__into_str(
+        Date,
+        char * str,
+        size_t size );
+
+
 #endif
 

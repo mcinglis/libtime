@@ -1,6 +1,7 @@
 
 #include "date.h"
 
+#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 
@@ -8,6 +9,7 @@
 #include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
+#include <libmacro/minmax.h>
 
 #include "tm.h"
 
@@ -128,5 +130,30 @@ date__from_str(
         return ( Date ){ 0 };
     }
     return d;
+}
+
+
+size_t
+date__into_str(
+        Date const date,
+        char * const str,
+        size_t const size )
+{
+    ASSERT( date__is_valid( date ), str != NULL );
+
+    if ( date.year < 0 || date.year > 9999 ) {
+        errno = EINVAL;
+        return 0;
+    }
+    int const n = snprintf( str, size - 1, "%4d-%2u-%2u",
+                            date.year, date.month, date.day );
+    str[ size - 1 ] = '\0';
+    if ( n < 0 ) {
+        ASSERT( errno != 0 );
+        return 0;
+    } else if ( ( uint ) n >= size ) {
+        errno = ENOBUFS;
+    }
+    return MAX( n, 0 );
 }
 
