@@ -118,12 +118,15 @@ date__from_str(
 {
     ASSERT( str != NULL );
 
-    uint year;
-    uint month;
-    uint day;
-    sscanf( str, "%4u-%2u-%2u", &year, &month, &day );
+    uint year = 0;
+    uint month = 0;
+    uint day = 0;
+    int const n = sscanf( str, "%4u-%2u-%2u", &year, &month, &day );
     Date const d = { .year = year, .month = month, .day = day };
-    ASSERT( DATE_INVARIANTS( d ) );
+    if ( n != 3 || !ALL( DATE_INVARIANTS( d ) ) ) {
+        errno = EBADMSG;
+        return ( Date ){ 0 };
+    }
     return d;
 }
 
