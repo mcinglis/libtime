@@ -123,7 +123,7 @@ date__from_str(
     uint year = 0;
     uint month = 0;
     uint day = 0;
-    int const n = sscanf( str, "%4u-%2u-%2u", &year, &month, &day );
+    int const n = sscanf( str, "%04u-%02u-%02u", &year, &month, &day );
     Date const d = { .year = year, .month = month, .day = day };
     if ( n != 3 || !ALL( DATE_INVARIANTS( d ) ) ) {
         errno = EBADMSG;
@@ -145,7 +145,7 @@ date__into_str(
         errno = EINVAL;
         return 0;
     }
-    int const n = snprintf( str, size - 1, "%4d-%2u-%2u",
+    int const n = snprintf( str, size - 1, "%04d-%02u-%02u",
                             date.year, date.month, date.day );
     str[ size - 1 ] = '\0';
     if ( n < 0 ) {
