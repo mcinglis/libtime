@@ -30,7 +30,7 @@
 
 typedef struct dayperiod {
     DayTime start;
-    time_t duration;
+    ulong duration;
 } DayPeriod;
 
 
