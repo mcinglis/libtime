@@ -59,11 +59,25 @@ bool date__greater_than_or_eq( Date, Date );
 bool date__greater_than( Date, Date );
 
 
-Date date__from_str( char const * );
+Date
+date__from_str(
+        char const * );
+
+
+void
+date__arg_parse(
+        char const * name,
+        char const * value,
+        void * vdate );
+
+
+char *
+date__to_strm(
+        Date );
 
 
 size_t
-date__into_str(
+date__into_strm(
         Date,
         char * str,
         size_t size );

@@ -68,13 +68,15 @@ DayTime daytime__sub( DayTime, DayTime );
 
 
 DayTime
-daytime__from_str( char const * str );
+daytime__from_str(
+        char const * str );
 
 
 void
-daytime__arg_parse( char const * name,
-                    char const * arg,
-                    void * destination );
+daytime__arg_parse(
+        char const * name,
+        char const * arg,
+        void * vdaytime );
 
 
 #endif

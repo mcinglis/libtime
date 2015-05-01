@@ -9,11 +9,13 @@
 
 #include <libtypes/types.h>
 #include <libmacro/assert.h>
+#include <libmacro/clamp.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libbase/long.h>
 #include <libbase/time.h>
 #include <libstr/str.h>
+#include <libstr/strm.h>
 
 
 bool
@@ -121,71 +123,6 @@ timespec__sub( struct timespec const x,
 }
 
 
-struct timespec
-timespec__from_str( char const * const str )
-{
-    ASSERT( str != NULL );
-
-    errno = 0;
-    if ( str[ 0 ] == '\0' ) {
-        errno = EBADMSG;
-        return ( struct timespec ){ 0 };
-    }
-    char * end1;
-    long const l1 = strtol( str, &end1, 10 );
-    if ( errno ) {
-        return ( struct timespec ){ 0 };
-    }
-    if ( str__equal( end1, "" ) || str__equal_i( end1, "s" ) ) {
-        return ( struct timespec ){ .tv_sec = l1 };
-    } else if ( str__equal_i( end1, "ns" ) ) {
-        if ( l1 > TIMESPEC_MAX_NSEC ) {
-            errno = ERANGE;
-            return ( struct timespec ){ 0 };
-        } else {
-            return ( struct timespec ){ .tv_nsec = l1 };
-        }
-    } else if ( end1[ 0 ] != 's' ) {
-        errno = EBADMSG;
-        return ( struct timespec ){ 0 };
-    }
-    char * end2;
-    long const l2 = strtol( end1 + 1, &end2, 10 );
-    if ( errno != 0 ) {
-        return ( struct timespec ){ 0 };
-    } else if ( l2 > TIMESPEC_MAX_NSEC ) {
-        errno = ERANGE;
-        return ( struct timespec ){ 0 };
-    }
-    if ( str__equal_i( end2, "ns" ) ) {
-        return ( struct timespec ){ .tv_sec = l1, .tv_nsec = l2 };
-    } else {
-        errno = EBADMSG;
-        return ( struct timespec ){ 0 };
-    }
-}
-
-
-size_t
-timespec__to_str( struct timespec const ts,
-                  char * const str,
-                  size_t const size )
-{
-    ASSERT( str != NULL );
-
-    int const n = snprintf( str, size - 1, "%lus%ldns",
-                            ts.tv_sec, ts.tv_nsec );
-    str[ size - 1 ] = '\0';
-    if ( n < 0 ) {
-        ASSERT( errno != 0 );
-        return 0;
-    } else if ( ( uint ) n >= size ) {
-        errno = ENOBUFS;
-    }
-    return ( n < 0 ) ? 0 : n;
-}
-
-
 ord
 timespec__compare( struct timespec const l,
                    struct timespec const r )
@@ -237,6 +174,97 @@ timespec__greater_than( struct timespec const l,
                         struct timespec const r )
 {
     return timespec__compare( l, r ) == GT;
+}
+
+
+struct timespec
+timespec__from_str(
+        char const * const str )
+{
+    ASSERT( str != NULL );
+
+    errno = 0;
+    if ( str[ 0 ] == '\0' ) {
+        errno = EBADMSG;
+        return ( struct timespec ){ 0 };
+    }
+    char * end1;
+    long const l1 = strtol( str, &end1, 10 );
+    if ( errno ) {
+        return ( struct timespec ){ 0 };
+    }
+    if ( str__equal( end1, "" ) || str__equal_i( end1, "s" ) ) {
+        return ( struct timespec ){ .tv_sec = l1 };
+    } else if ( str__equal_i( end1, "ns" ) ) {
+        if ( l1 > TIMESPEC_MAX_NSEC ) {
+            errno = ERANGE;
+            return ( struct timespec ){ 0 };
+        } else {
+            return ( struct timespec ){ .tv_nsec = l1 };
+        }
+    } else if ( end1[ 0 ] != 's' ) {
+        errno = EBADMSG;
+        return ( struct timespec ){ 0 };
+    }
+    char * end2;
+    long const l2 = strtol( end1 + 1, &end2, 10 );
+    if ( errno != 0 ) {
+        return ( struct timespec ){ 0 };
+    } else if ( l2 > TIMESPEC_MAX_NSEC ) {
+        errno = ERANGE;
+        return ( struct timespec ){ 0 };
+    }
+    if ( str__equal_i( end2, "ns" ) ) {
+        return ( struct timespec ){ .tv_sec = l1, .tv_nsec = l2 };
+    } else {
+        errno = EBADMSG;
+        return ( struct timespec ){ 0 };
+    }
+}
+
+
+void
+timespec__arg_parse(
+        char const * const name,
+        char const * const value,
+        void * const vtimespec )
+{
+    ASSERT( value != NULL, vtimespec != NULL );
+
+    struct timespec * const ts = vtimespec;
+    *ts = timespec__from_str( value );
+}
+
+
+char *
+timespec__to_strm(
+        struct timespec const ts )
+{
+    char buf[ 128 ];
+    timespec__into_strm( ts, buf, sizeof buf );
+    if ( errno ) { return NULL; }
+    return strm__copy_str( buf );
+}
+
+
+size_t
+timespec__into_strm(
+        struct timespec const ts,
+        char * const str,
+        size_t const size )
+{
+    ASSERT( str != NULL );
+
+    int const n = snprintf( str, size - 1, "%jds%ldns",
+                            CLAMP_TO_INTMAX( ts.tv_sec ), ts.tv_nsec );
+    str[ size - 1 ] = '\0';
+    if ( n < 0 ) {
+        ASSERT( errno != 0 );
+        return 0;
+    } else if ( ( uint ) n >= size ) {
+        errno = ENOBUFS;
+    }
+    return ( n < 0 ) ? 0 : n;
 }
 
 

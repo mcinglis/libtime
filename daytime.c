@@ -15,14 +15,16 @@
 
 
 bool
-daytime__is_valid( DayTime const t )
+daytime__is_valid(
+        DayTime const t )
 {
     return ALL( DAYTIME_INVARIANTS( t ) );
 }
 
 
 DayTime
-daytime__from_tm( struct tm const tm )
+daytime__from_tm(
+        struct tm const tm )
 {
     return ( DayTime ){ .hour    = tm.tm_hour,
                         .minutes = tm.tm_min,
@@ -31,21 +33,24 @@ daytime__from_tm( struct tm const tm )
 
 
 DayTime
-daytime__local_from_time( time_t const t )
+daytime__local_from_time(
+        time_t const t )
 {
     return daytime__from_tm( tm__local_from_time( t ) );
 }
 
 
 DayTime
-daytime__local_from_timespec( struct timespec const ts )
+daytime__local_from_timespec(
+        struct timespec const ts )
 {
     return daytime__from_tm( tm__local_from_timespec( ts ) );
 }
 
 
 DayTime
-daytime__from_seconds( time_t s )
+daytime__from_seconds(
+        time_t s )
 {
     if ( s <= 0 ) {
         return ( DayTime ){ 0, 0, 0 };
@@ -62,7 +67,8 @@ daytime__from_seconds( time_t s )
 
 
 time_t
-daytime__to_seconds( DayTime const t )
+daytime__to_seconds(
+        DayTime const t )
 {
     ASSERT( daytime__is_valid( t ) );
 
@@ -71,8 +77,9 @@ daytime__to_seconds( DayTime const t )
 
 
 ord
-daytime__compare( DayTime const l,
-               DayTime const r )
+daytime__compare(
+        DayTime const l,
+        DayTime const r )
 {
     ASSERT( daytime__is_valid( l ), daytime__is_valid( r ) );
 
@@ -89,56 +96,63 @@ daytime__compare( DayTime const l,
 
 
 bool
-daytime__less_than( DayTime const l,
-                 DayTime const r )
+daytime__less_than(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) == LT;
 }
 
 
 bool
-daytime__less_than_or_eq( DayTime const l,
-                       DayTime const r )
+daytime__less_than_or_eq(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) <= EQ;
 }
 
 
 bool
-daytime__equal( DayTime const l,
-             DayTime const r )
+daytime__equal(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) == EQ;
 }
 
 
 bool
-daytime__not_equal( DayTime const l,
-                 DayTime const r )
+daytime__not_equal(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) != EQ;
 }
 
 
 bool
-daytime__greater_than_or_eq( DayTime const l,
-                          DayTime const r )
+daytime__greater_than_or_eq(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) >= EQ;
 }
 
 
 bool
-daytime__greater_than( DayTime const l,
-                    DayTime const r )
+daytime__greater_than(
+        DayTime const l,
+        DayTime const r )
 {
     return daytime__compare( l, r ) == GT;
 }
 
 
 DayTime
-daytime__add( DayTime const l,
-           DayTime const r )
+daytime__add(
+        DayTime const l,
+        DayTime const r )
 {
     ASSERT( daytime__is_valid( l ), daytime__is_valid( r ) );
 
@@ -148,8 +162,9 @@ daytime__add( DayTime const l,
 
 
 DayTime
-daytime__sub( DayTime const l,
-           DayTime const r )
+daytime__sub(
+        DayTime const l,
+        DayTime const r )
 {
     ASSERT( daytime__is_valid( l ), daytime__is_valid( r ) );
 
@@ -159,7 +174,8 @@ daytime__sub( DayTime const l,
 
 
 DayTime
-daytime__from_str( char const * const str )
+daytime__from_str(
+        char const * const str )
 {
     ASSERT( str != NULL );
 
@@ -207,13 +223,14 @@ daytime__from_str( char const * const str )
 
 
 void
-daytime__arg_parse( char const * const name,
-                    char const * const arg,
-                    void * const vdest )
+daytime__arg_parse(
+        char const * const name,
+        char const * const value,
+        void * const vdaytime )
 {
-    ASSERT( arg != NULL, vdest != NULL );
+    ASSERT( value != NULL, vdaytime != NULL );
 
-    DayTime * const dt = vdest;
-    *dt = daytime__from_str( arg );
+    DayTime * const dt = vdaytime;
+    *dt = daytime__from_str( value );
 }
 

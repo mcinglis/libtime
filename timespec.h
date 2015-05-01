@@ -82,13 +82,27 @@ bool timespec__greater_than( struct timespec, struct timespec );
 
 
 struct timespec
-timespec__from_str( char const * str );
+timespec__from_str(
+        char const * str );
+
+
+void
+timespec__arg_parse(
+        char const * name,
+        char const * value,
+        void * vtimespec );
+
+
+char *
+timespec__to_strm(
+        struct timespec );
 
 
 size_t
-timespec__to_str( struct timespec,
-                  char * str,
-                  size_t size );
+timespec__into_strm(
+        struct timespec,
+        char * str,
+        size_t size );
 
 
 #endif
