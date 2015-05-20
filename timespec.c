@@ -1,10 +1,10 @@
 
 #include "timespec.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <errno.h>
-
+#include <string.h>
 #include <time.h>
 
 #include <libtypes/types.h>
@@ -15,7 +15,6 @@
 #include <libbase/long.h>
 #include <libbase/time.h>
 #include <libstr/str.h>
-#include <libstr/strm.h>
 
 
 bool
@@ -240,10 +239,11 @@ char *
 timespec__to_strm(
         struct timespec const ts )
 {
+    errno = 0;
     char buf[ 128 ];
     timespec__into_strm( ts, buf, sizeof buf );
     if ( errno ) { return NULL; }
-    return strm__copy_str( buf );
+    return strdup( buf );
 }
 
 
@@ -255,6 +255,7 @@ timespec__into_strm(
 {
     ASSERT( str != NULL );
 
+    errno = 0;
     int const n = snprintf( str, size - 1, "%jds%ldns",
                             CLAMP_TO_INTMAX( ts.tv_sec ), ts.tv_nsec );
     str[ size - 1 ] = '\0';

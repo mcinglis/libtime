@@ -5,8 +5,9 @@
 
 DEPS_DIR ?= deps
 
-LIBBASE  ?= $(DEPS_DIR)/libbase
-LIBSTR   ?= $(DEPS_DIR)/libstr
+LIBBASE   ?= $(DEPS_DIR)/libbase
+LIBSTR    ?= $(DEPS_DIR)/libstr
+TPLRENDER ?= $(DEPS_DIR)/tplrender/tplrender
 
 CPPFLAGS += -I$(DEPS_DIR) -D_POSIX_C_SOURCE=200809L
 
@@ -19,8 +20,6 @@ cflags_warnings := -Wall -Wextra -Wpedantic \
                    -Wno-override-init -Wno-unused-parameter
 
 CFLAGS ?= $(cflags_std) -g $(cflags_warnings)
-
-TPLRENDER ?= $(DEPS_DIR)/tplrender/tplrender
 
 
 libbase_types  := long intmax time

@@ -4,13 +4,13 @@
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <libtypes/types.h>
 #include <libmacro/assert.h>
 #include <libmacro/compare.h>
 #include <libmacro/logic.h>     // ALL
 #include <libmacro/minmax.h>
-#include <libstr/strm.h>
 
 #include "tm.h"
 
@@ -160,10 +160,11 @@ char *
 date__to_strm(
         Date const date )
 {
+    errno = 0;
     char buf[ 128 ];
     date__into_strm( date, buf, sizeof buf );
     if ( errno ) { return NULL; }
-    return strm__copy_str( buf );
+    return strdup( buf );
 }
 
 
@@ -175,6 +176,7 @@ date__into_strm(
 {
     ASSERT( date__is_valid( date ), str != NULL );
 
+    errno = 0;
     int const n = snprintf( str, size - 1, "%04d-%02u-%02u",
                             date.year, date.month, date.day );
     str[ size - 1 ] = '\0';
