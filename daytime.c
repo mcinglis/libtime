@@ -223,7 +223,7 @@ daytime__from_str(
 
 
 void
-daytime__arg_parse(
+daytime__argparse(
         char const * const name,
         char const * const value,
         void * const vdaytime )

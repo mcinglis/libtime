@@ -65,7 +65,7 @@ date__from_str(
 
 
 void
-date__arg_parse(
+date__argparse(
         char const * name,
         char const * value,
         void * vdate );

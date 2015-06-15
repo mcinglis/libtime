@@ -143,7 +143,7 @@ date__from_str(
 
 
 void
-date__arg_parse(
+date__argparse(
         char const * const name,
         char const * const value,
         void * const vdate )

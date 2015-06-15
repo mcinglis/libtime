@@ -87,7 +87,7 @@ timespec__from_str(
 
 
 void
-timespec__arg_parse(
+timespec__argparse(
         char const * name,
         char const * value,
         void * vtimespec );

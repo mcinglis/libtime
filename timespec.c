@@ -223,7 +223,7 @@ timespec__from_str(
 
 
 void
-timespec__arg_parse(
+timespec__argparse(
         char const * const name,
         char const * const value,
         void * const vtimespec )
