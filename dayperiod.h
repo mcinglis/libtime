@@ -29,18 +29,20 @@
 
 
 typedef struct dayperiod {
-    DayTime start;
     ulong duration;
+    DayTime start;
 } DayPeriod;
 
 
 DayTime
-dayperiod__end( DayPeriod );
+dayperiod__end(
+        DayPeriod );
 
 
 bool
-dayperiod__contains( DayPeriod,
-                     DayTime );
+dayperiod__contains(
+        DayPeriod,
+        DayTime );
 
 
 #endif // ifndef LIBTIME_DAYPERIOD_H
