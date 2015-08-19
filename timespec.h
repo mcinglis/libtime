@@ -34,11 +34,13 @@
 
 
 bool
-timespec__is_valid( struct timespec );
+timespec__is_valid(
+        struct timespec );
 
 
 struct timespec
-timespec__get_clock( clockid_t );
+timespec__get_clock(
+        clockid_t );
 
 
 struct timespec
@@ -49,24 +51,33 @@ struct timespec
 timespec__get_monotonic( void );
 
 
-bool
-timespec__can_add( struct timespec,
-                   struct timespec );
-
-
-struct timespec
-timespec__add( struct timespec,
-               struct timespec );
+double
+timespec__to_double(
+        struct timespec );
 
 
 bool
-timespec__can_sub( struct timespec,
-                   struct timespec );
+timespec__can_add(
+        struct timespec,
+        struct timespec );
 
 
 struct timespec
-timespec__sub( struct timespec,
-               struct timespec );
+timespec__add(
+        struct timespec,
+        struct timespec );
+
+
+bool
+timespec__can_sub(
+        struct timespec,
+        struct timespec );
+
+
+struct timespec
+timespec__sub(
+        struct timespec,
+        struct timespec );
 
 
 ord timespec__compare( struct timespec, struct timespec );

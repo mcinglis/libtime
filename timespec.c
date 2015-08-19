@@ -18,14 +18,16 @@
 
 
 bool
-timespec__is_valid( struct timespec const ts )
+timespec__is_valid(
+        struct timespec const ts )
 {
     return ALL( TIMESPEC_INVARIANTS( ts ) );
 }
 
 
 struct timespec
-timespec__get_clock( clockid_t const clock )
+timespec__get_clock(
+        clockid_t const clock )
 {
     errno = 0;
     struct timespec ts = { 0 };
@@ -48,9 +50,18 @@ timespec__get_monotonic( void )
 }
 
 
+double
+timespec__to_double(
+        struct timespec const x )
+{
+    return ( ( double ) x.tv_sec ) + ( x.tv_nsec / 1000000000.0 );
+}
+
+
 bool
-timespec__can_add( struct timespec const x,
-                   struct timespec const y )
+timespec__can_add(
+        struct timespec const x,
+        struct timespec const y )
 {
     ASSERT( timespec__is_valid( x ), timespec__is_valid( y ) );
 
@@ -65,8 +76,9 @@ timespec__can_add( struct timespec const x,
 
 
 struct timespec
-timespec__add( struct timespec const x,
-               struct timespec const y )
+timespec__add(
+        struct timespec const x,
+        struct timespec const y )
 {
     ASSERT( timespec__is_valid( x ),
             timespec__is_valid( y ),
@@ -86,8 +98,9 @@ timespec__add( struct timespec const x,
 
 
 bool
-timespec__can_sub( struct timespec const x,
-                   struct timespec const y )
+timespec__can_sub(
+        struct timespec const x,
+        struct timespec const y )
 {
     ASSERT( timespec__is_valid( x ), timespec__is_valid( y ) );
 
@@ -102,8 +115,9 @@ timespec__can_sub( struct timespec const x,
 
 
 struct timespec
-timespec__sub( struct timespec const x,
-               struct timespec const y )
+timespec__sub(
+        struct timespec const x,
+        struct timespec const y )
 {
     ASSERT( timespec__is_valid( x ),
             timespec__is_valid( y ),
